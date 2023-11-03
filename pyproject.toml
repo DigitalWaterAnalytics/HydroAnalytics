@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "HydroAnalytics"
+version = "0.1.0"
+description = "Hydrologic data analysis tools"
+readme = "README.md"
+authors = [
+    {name = "Caleb Buahin", email = "caleb.buahin@gmail.com"}
+]
+
+maintainers = [
+    {name = "Caleb Buahin", email = "caleb.buahin@gmail.com"}
+]
+
+
+[project.urls]
+homepage = "https://github.com/DigitalWaterAnalytics/HydroAnalytics"
+documentation = "https://github.com/DigitalWaterAnalytics/HydroAnalytics"
+repository = "https://github.com/DigitalWaterAnalytics/HydroAnalytics"
+download = "https://github.com/DigitalWaterAnalytics/HydroAnalytics"
+funding = "https://github.com/DigitalWaterAnalytics/HydroAnalytics"
+
+[project.scripts]
+
+
+[project.dependencies]
+pandas = ">=1.0.0"
+
+
