@@ -1,15 +1,11 @@
-import os
-import unittest
-from datetime import datetime, time
 import plotly.express as px
-import pandas as pd
 
 from plotly.offline import plot
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
-from ..precipitation import *
-from .data import CVG_PRECIP
+from hydroanalytics.precipitation.precipitation import *
+from hydroanalytics.precipitation.tests.data import CVG_PRECIP
 
 HERE = os.path.dirname(os.path.realpath(__file__))
 
