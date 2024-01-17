@@ -21,12 +21,12 @@ def event_short_name(
 ) -> str:
     """
     This function returns a short name for the event
-    :param event_date:
-    :param date_time_format:
-    :param output_date_time_format:
-    :param output_prefix:
-    :param output_suffix:
-    :return:
+    :param event_date: The date of the event
+    :param date_time_format:  The format of the event date
+    :param output_date_time_format: The format of the output date
+    :param output_prefix: The prefix to use for the output
+    :param output_suffix: The suffix to use for the output
+    :return: A string with the event name
     """
 
     if isinstance(event_date, str):
@@ -53,7 +53,7 @@ def antecedent_event_time(events: pd.DataFrame, ts_start: pd.Timestamp) -> pd.Da
     This function returns a dataframe of the antecedent times before an event
     :param events:  A dataframe with the event attributes
     :param ts_start:  The start of the timeseries data
-    :return:
+    :return: A dataframe with the timeseries data antecedent to the event
     """
     antecedent_times = events['start'] - events['actual_end'].shift(1)
     return antecedent_times.fillna(events.iloc[0]['start'] - ts_start)
@@ -73,7 +73,7 @@ def get_event_attributes(
     :param units: Units of to use for the event attributes. Valid values are 'english' and 'metric'
     :param series: Series to use for the event attributes. Valid values are Partial Duration 'pds' and
     Annual Maximum Series 'ams'
-    :return:
+    :return: A dataframe with the event attributes
     """
 
     NOAA_HDSC_REST_URL = r'https://hdsc.nws.noaa.gov/cgi-bin/hdsc/new/'
@@ -205,26 +205,12 @@ def get_events(
     return events
 
 
-def write_swmm_rainfall_file(ts: pd.DataFrame, name: str, output_file_path: str):
+def write_swmm_rainfall_file(rainfall: pd.DataFrame, events: pd.DataFrame, output_file_path: str):
     """
-    This function writes a SWMM rainfall file from a pandas dataframe
-    :param ts:  A pandas dataframe with a datetime index and a single column of rainfall depths
-    :param name:  The name of the rainfall file
-    :param output_file_path:  The path to write the rainfall file to
-    :return:
-    """
-    with open(output_file_path, 'w') as f:
-        f.write(f';;{name}\n')
-        for index, row in ts.iterrows():
-            f.write(f'{index.strftime("%m/%d/%Y %H:%M")}\t{row[0]}\n')
-
-
-def write_swmm_rainfall_file_from_events(rainfall: pd.DataFrame, events: pd.DataFrame, output_file_path: str):
-    """
-    This function writes a SWMM rainfall file from a pandas dataframe based on events in a dataframe
-    :param rainfall:  A pandas dataframe with a datetime index and a single column of rainfall depths
-    :param events:  A pandas dataframe with the event attributes
-    :param output_file_path:  The path to write the rainfall file to
+    This function writes a SWMM rainfall file for each event
+    :param rainfall:
+    :param events:
+    :param output_file_path:
     :return:
     """
     for _, event_row in events.iterrows():
