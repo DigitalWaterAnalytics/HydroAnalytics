@@ -205,14 +205,33 @@ def get_events(
     return events
 
 
-def write_swmm_rainfall_file(rainfall: pd.DataFrame, events: pd.DataFrame, output_file_path: str):
+def write_swmm_rainfall_file(ts: pd.DataFrame, name: str, output_file_path: str):
+    """
+    This function writes a SWMM rainfall file from a pandas dataframe
+    :param ts:  A pandas dataframe with a datetime index and a single column of rainfall depths
+    :param name:  The name of the rainfall file
+    :param output_file_path:  The path to write the rainfall file to
+    :return:
+    """
+    with open(output_file_path, 'w') as f:
+        f.write(f';;{name}\n')
+        for index, row in ts.iterrows():
+            f.write(f'{index.strftime("%m/%d/%Y %H:%M")}\t{row[0]}\n')
+
+
+def write_swmm_rainfall_file_from_events(rainfall: pd.DataFrame, events: pd.DataFrame, output_file_path: str):
+    """
+    This function writes a SWMM rainfall file from a pandas dataframe based on events in a dataframe
+    :param rainfall:  A pandas dataframe with a datetime index and a single column of rainfall depths
+    :param events:  A pandas dataframe with the event attributes
+    :param output_file_path:  The path to write the rainfall file to
+    :return:
+    """
     for _, event_row in events.iterrows():
-        filename = os.path.join(output_file_path, f'{event_row["name"]}.dat')
-        with open(filename, 'w') as f:
-            f.write(f';;{event_row["name"]}\n')
-            ts = rainfall[event_row['start']:event_row['end']]
-            for index, row in ts.iterrows():
-                f.write(f'{index.strftime("%m/%d/%Y %H:%M")}\t{row[0]}\n')
+        event_name = f'{event_row["name"]}'
+        filename = os.path.join(output_file_path, f'{event_name}.dat')
+        ts = rainfall[event_row['start']:event_row['end']]
+        write_swmm_rainfall_file(ts, event_name, filename)
 
 
 def cluster_events(events: pd.DataFrame, cluster_columns: List[str], number_of_clusters: int) -> pd.DataFrame:
